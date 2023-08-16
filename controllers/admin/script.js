@@ -1,6 +1,7 @@
 const cloudinary = require('cloudinary').v2
 const DatauriParser = require('datauri/parser');
 const Products = require('../../models/Labours');
+const contractors = require('../../models/contractors');
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -51,6 +52,56 @@ module.exports.getProducts = async (req, res, next) => {
 }
 
 
+module.exports.getAddLabour = (req, res, next) => {
+    res.render('addLabour', {
+        isAdmin: req.user.isAdmin,
+        cid: req.user._id
+    });
+}
+
+module.exports.postAddLabour = (req, res, next) => {
+    const { Labour_name, Labour_profession, Labour_wages, cid } = req.body;
+    const { Labour_image } = req.files;
+    console.log(Labour_name, Labour_profession, Labour_wages);
+    console.log(Labour_image);
+    console.log("CID :- ", cid);
+    cloudinary.uploader.upload(Labour_image.tempFilePath, async (err, result) => {
+        try {
+            const addproduct = await Products.create({
+                Labour_name,
+                Labour_profession,
+                Labour_wages,
+                imageUrl: result.url,
+                labourId: req.user._id
+            })
+            console.log(addproduct);
+            const id = "64dcdd68c8a80b1d32cf9856";
+            const contractor = await contractors.findById({ _id: id });
+            contractor.Labours.push(addproduct._id);
+            await contractor.save();
+            return res.redirect('/shop/contractor');
+        }
+        catch (err) {
+            return res.send(err)
+        }
+    }
+)}
+
+module.exports.getMyLabour = async (req, res, next) => {
+    try {
+        const id = "64dcdd68c8a80b1d32cf9856";
+        let contractor = await contractors.findById({ _id: id }).populate("Labours");
+        let labours = contractor.Labours;
+        console.log(labours);
+        res.render('admin/products', {
+            products: labours,
+            isAdmin: contractor.isAdmin
+        });
+    }
+    catch (err) {
+        return res.send(err);
+    }
+}
 
 // try {
 //     const parser = new DatauriParser();

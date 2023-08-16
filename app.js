@@ -51,7 +51,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/', (req, res, next) => {
-    if (req.user) return res.redirect('/shop/profile');
+    if (req.user) return res.redirect('/dashboard');
     return res.redirect('/clientlogin');
 })
 
