@@ -28,7 +28,10 @@ module.exports.postAddProduct = async (req, res, next) => {
                 imageUrl:result.url,
                 labourId:req.user._id
             })
-           console.log(addproduct);
+            req.flash('msg', 'Labour is added succesfully👍')
+           return res.render('addproduct',{
+                msg:req.flash('msg')
+           })
         }
         catch (err) {
            return  res.send(err)

@@ -1,0 +1,15 @@
+<div class="productsList">
+    {{#each this.products as |product|}}
+    <div class="productItem">
+        <img src="{{product.imageUrl}}"><br>
+        <div class="name">Name:-{{product.Labour_name}}</div>
+        <div class="price">Wages:-{{product.Labour_wages}}</div>
+        <div class="description">Prof:-{{product.Labour_profession}}</div>
+        <input type="hidden" labourid="{{product.labourId}}">
+        <button>Add</button>
+        <button>delete</button>
+        <button>update</button>
+    </div>
+    {{/each}}
+</div>
+<script src="/scripts/contractor/addlabour.js"></script>

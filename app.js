@@ -8,24 +8,9 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('./auth/passport');
 const hbs = require('hbs');
-const multer = require('multer');
 const fileUpload=require('express-fileupload')
-
-
-// const storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, 'uploads/')
-//     },
-//     filename: function (req, file, cb) {
-//         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-//         console.log(path.extname(file.originalname));
-//         cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname))
-//     }
-// })
-
-// const upload = multer({ });
-
-// app.use(upload.single('image'));
+const ifNotLoggedIn = require('./middlewares/checkedLoggedIn');
+const isLoggedIn = require('./middlewares/isLoggedIn');
 
 app.use(flash());
 app.set('view engine', 'hbs');
@@ -39,7 +24,6 @@ app.use(fileUpload({
     tempFileDir : '/tmp/'
 }));
 
-
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -50,13 +34,23 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+
+
 app.get('/', (req, res, next) => {
     if (req.user) return res.redirect('/dashboard');
     return res.redirect('/clientlogin');
 })
 
+
+app.use('/signup', ifNotLoggedIn, require('./routes/signup'));
 app.use('/clientlogin',require('./routes/clientlogin'))
+app.use('/login', ifNotLoggedIn, require('./routes/clientlogin'));
 app.use('/dashboard',require('./routes/dashboard'))
+
+app.use('/admin', isLoggedIn, require('./routes/admin'));
+app.use('/shop', isLoggedIn, require('./routes/shop'));
+app.use('/contractor',require('./routes/contractor'))
 
 app.get('/logout', function (req, res, next) {
     req.logout(function (err) {
@@ -64,14 +58,6 @@ app.get('/logout', function (req, res, next) {
         res.redirect('/');
     });
 });
-const ifNotLoggedIn = require('./middlewares/checkedLoggedIn');
-app.use('/signup', ifNotLoggedIn, require('./routes/signup'));
-app.use('/login', ifNotLoggedIn, require('./routes/clientlogin'));
-
-const isLoggedIn = require('./middlewares/isLoggedIn');
-app.use('/admin', isLoggedIn, require('./routes/admin'));
-app.use('/shop', isLoggedIn, require('./routes/shop'));
-
 mongoose.connect(process.env.MONGO_URL)
     .then(() => {
         app.listen(PORT, () => {

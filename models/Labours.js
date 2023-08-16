@@ -20,6 +20,11 @@ const labourSchema = new Schema({
     labourId: {
         type: Schema.Types.ObjectId,
         ref: 'Users'
+    },
+    contractorId:{
+        type:Schema.Types.ObjectId,
+        ref:'Contractor',
+        default:null
     }
 });
 

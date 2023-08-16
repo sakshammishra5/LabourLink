@@ -14,6 +14,10 @@ const userSchema = new Schema({
     isAdmin: {
         type: Boolean,
         default: false
+    },
+    isContractor:{
+        type:Boolean,
+        default:false
     }
 });
 
