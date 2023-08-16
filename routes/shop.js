@@ -8,8 +8,6 @@ const { getContractors } = require('../controllers/shop/contractors');
 // router for getting the labours
 router.get('/profile',getProfile);
 router.get('/labours',getProducts);
-
-// router for getting the contractors
 router.get('/contractors',getContractors)
 
 

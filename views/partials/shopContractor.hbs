@@ -1,0 +1,22 @@
+<div class="productsList">
+    {{#each this.products as |product|}}
+    <div class="productItem">
+        <div class="productItem-img-container">
+            <img src="{{product.imageUrl}}"><br>
+        </div>
+        <div class="productItem-info-wrapper">
+            <div class="productItem-info">
+                <div class="name">{{product.contractor_name}}</div>
+                <div class="price">{{product.budget}}</div>
+                <div class="description">{{product.description}}</div>
+            </div>
+            <div class="productItem-action">
+                <button>buy</button>
+                <button>Add to cart</button>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
+
+<script src="/scripts/addtocart.js"></script>

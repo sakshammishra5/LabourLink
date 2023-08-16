@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{> meta}}
+    <title>Document</title>
+    <link rel="stylesheet" href="/styles/navbar.css">
+</head>
+
+<body>
+
+    {{> contractorNav isAdmin=isAdmin}}
+    <div class="addproduct-container">
+        <div class="msg">{{msg}}</div>
+
+        <form action="/admin/add-labour" class="addProduct" method="POST" enctype="multipart/form-data">
+            <label for="Labour_name">Labour Name</label>
+            <input type="text" id="Labour_name" name="Labour_name"><br>
+            <label for="Labour_profession">Labour profession</label>
+            <input type="text" id="Labour_profession" name="Labour_profession"><br>
+            <label for="Labour_wages">Wages</label>
+            <input type="number" id="Labour_wages" name="Labour_wages"><br>
+            <label for="Labour_image">Labour Image</label>
+            <input type="file" id="Labour_image" name="Labour_image"><br>
+            <input type="text" value="{{cid}}" name="cid" hidden>
+            <button>Submit</button>
+        </form>
+
+    </div>
+
+</body>
+
+</html>
